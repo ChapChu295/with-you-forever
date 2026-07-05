@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>100 Days With You</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#09090b;
+  color:white;
+  font-family:'Pretendard', sans-serif;
+  overflow:hidden;
+  height:100vh;
+}
+
+.container{
+  position:relative;
+  width:100%;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+.bg{
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 40%),
+    linear-gradient(180deg,#0f0f13,#09090b);
+}
+
+.card{
+  position:relative;
+  z-index:2;
+  width:100%;
+  max-width:380px;
+  min-height:560px;
+  padding:38px 28px;
+  border-radius:32px;
+  background:rgba(255,255,255,0.06);
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,0.08);
+  text-align:center;
+  box-shadow:0 10px 40px rgba(0,0,0,.45);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.small{
+  font-size:13px;
+  letter-spacing:2px;
+  color:#c9c9d1;
+  margin-bottom:18px;
+}
+
+.days{
+  font-size:58px;
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+.title{
+  font-size:20px;
+  font-weight:600;
+  margin-bottom:26px;
+  line-height:1.5;
+}
+
+.line{
+  width:50px;
+  height:1px;
+  background:rgba(255,255,255,0.25);
+  margin:0 auto 28px;
+}
+
+.message{
+  font-size:15px;
+  line-height:1.9;
+  color:#ececf1;
+  min-height:170px;
+  white-space:pre-line;
+  transition:.5s;
+}
+
+.fade{
+  opacity:0;
+}
+
+.cursor{
+  display:inline-block;
+  animation:blink .8s infinite;
+}
+
+@keyframes blink{
+  50%{
+    opacity:0;
+  }
+}
+
+button{
+  margin-top:30px;
+  border:none;
+  background:white;
+  color:black;
+  padding:14px 22px;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  display:none;
+}
+
+button:active{
+  transform:scale(.96);
+}
+
+.stars{
+  position:absolute;
+  inset:0;
+}
+
+.star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:white;
+  border-radius:50%;
+  opacity:.7;
+  animation:twinkle 4s infinite ease-in-out;
+}
+
+@keyframes twinkle{
+  0%,100%{
+    opacity:.2;
+  }
+  50%{
+    opacity:1;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="bg"></div>
+
+  <div class="stars" id="stars"></div>
+
+  <div class="card">
+
+    <div class="small">OUR 100 DAYS</div>
+
+    <div class="days">100</div>
+
+    <div class="title">
+      너와 사랑한 지<br>
+      벌써 100일
+    </div>
+
+    <div class="line"></div>
+
+    <div class="message" id="typing"></div>
+
+    <button id="finalBtn" onclick="showFinal()">
+      0_1
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+// part1 마지막 문장에 * 추가 및 하단에 작은 글씨로 출처 추가
+const part1 =
+`100이라는 숫자에
+의미를 부여하는 타입은 
+아니라고 했지만
+
+너여서 그런 건지
+너라서 그런 건지
+아니면 너니까 그런 건지 *
+
+<span style="font-size:11px; color:#a2a2ad; display:block; margin-top:12px; font-weight:300;">* 커피 소년 / 너여서 너라서 너니까</span>`;
+
+const part2 =
+`누군가에겐 길고
+또 누군가에겐 짧은 시간일
+우리 함께 했던 100일
+
+네가 있어서 하루하루 즐겁고 행복하게 보냈어
+
+겨울에 만나서
+봄에 시작되고 
+벌써 여름이네
+
+이 다음 가을도
+또 다른 겨울도
+그 다음 봄에도
+다시 여름까지 
+
+함께 보내자`;
+
+const typing = document.getElementById("typing");
+const button = document.getElementById("finalBtn");
+
+// 글자 수 계산 및 태그 처리를 위한 변수 수정
+let index = 0;
+
+function typeText(text, callback){
+  typing.innerHTML = "";
+  index = 0;
+
+  function typingEffect(){
+    // HTML 태그(<span>)가 있으면 타이핑 효과 없이 한 번에 출력되도록 처리
+    if (text.charAt(index) === "<") {
+      let tagEnd = text.indexOf(">", index);
+      let closingTagEnd = text.indexOf("</span>", tagEnd);
+      if (closingTagEnd !== -1) {
+        typing.innerHTML += text.substring(index, closingTagEnd + 7);
+        index = closingTagEnd + 7;
+      } else {
+        typing.innerHTML += text.substring(index, tagEnd + 1);
+        index = tagEnd + 1;
+      }
+    }
+
+    if(index < text.length){
+      typing.innerHTML += text.charAt(index);
+      index++;
+      setTimeout(typingEffect, 85); // 기존 피드백 반영된 속도 (85)
+    }else{
+      if(callback){
+        callback();
+      }
+    }
+  }
+
+  typingEffect();
+}
+
+typeText(part1, () => {
+
+  setTimeout(() => {
+
+    typing.classList.add("fade");
+
+    setTimeout(() => {
+
+      typing.classList.remove("fade");
+
+      typeText(part2, () => {
+        button.style.display = "inline-block";
+      });
+
+    }, 600);
+
+  }, 1800);
+
+});
+
+function showFinal(){
+  document.querySelector(".card").innerHTML = `
+    <div style="font-size:70px;margin-bottom:16px;">♡</div>
+
+    <div style="font-size:28px;font-weight:700;line-height:1.6;">
+      앞으로도<br>
+      오래 같이하자
+    </div>
+
+    <div style="margin-top:20px;font-size:15px;line-height:1.9;color:#d8d8de;">
+      100일 동안 고마웠고,<br>
+      앞으로의 수많은 날에도<br>
+      네가 있었으면 좋겠어.
+    </div>
+  `;
+}
+
+const stars = document.getElementById("stars");
+
+for(let s=0; s<45; s++){
+  const star = document.createElement("div");
+
+  star.className = "star";
+
+  star.style.left = Math.random()*100 + "%";
+  star.style.top = Math.random()*100 + "%";
+  star.style.animationDelay = Math.random()*4 + "s";
+
+  stars.appendChild(star);
+}
+</script>
+
+</body>
+</html>

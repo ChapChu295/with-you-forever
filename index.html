@@ -176,8 +176,9 @@ button:active{
 
     <div class="message" id="typing"></div>
 
+    <!-- 버튼 텍스트를 요구사항에 맞춰 변경했습니다 -->
     <button id="finalBtn" onclick="showFinal()">
-      0_1
+      사랑해 연시은
     </button>
 
   </div>
@@ -185,7 +186,6 @@ button:active{
 </div>
 
 <script>
-// part1 마지막 문장에 * 추가 및 하단에 작은 글씨로 출처 추가
 const part1 =
 `100이라는 숫자에
 의미를 부여하는 타입은 
@@ -202,9 +202,10 @@ const part2 =
 또 누군가에겐 짧은 시간일
 우리 함께 했던 100일
 
-네가 있어서 하루하루 즐겁고 행복하게 보냈어
+네가 있어서 하루하루 즐겁고 행복하게 보냈어`;
 
-겨울에 만나서
+const part3 =
+`겨울에 만나서
 봄에 시작되고 
 벌써 여름이네
 
@@ -218,7 +219,6 @@ const part2 =
 const typing = document.getElementById("typing");
 const button = document.getElementById("finalBtn");
 
-// 글자 수 계산 및 태그 처리를 위한 변수 수정
 let index = 0;
 
 function typeText(text, callback){
@@ -226,7 +226,6 @@ function typeText(text, callback){
   index = 0;
 
   function typingEffect(){
-    // HTML 태그(<span>)가 있으면 타이핑 효과 없이 한 번에 출력되도록 처리
     if (text.charAt(index) === "<") {
       let tagEnd = text.indexOf(">", index);
       let closingTagEnd = text.indexOf("</span>", tagEnd);
@@ -242,7 +241,7 @@ function typeText(text, callback){
     if(index < text.length){
       typing.innerHTML += text.charAt(index);
       index++;
-      setTimeout(typingEffect, 85); // 기존 피드백 반영된 속도 (85)
+      setTimeout(typingEffect, 85);
     }else{
       if(callback){
         callback();
@@ -254,23 +253,27 @@ function typeText(text, callback){
 }
 
 typeText(part1, () => {
-
   setTimeout(() => {
-
     typing.classList.add("fade");
-
+    
     setTimeout(() => {
-
       typing.classList.remove("fade");
-
+      
       typeText(part2, () => {
-        button.style.display = "inline-block";
+        setTimeout(() => {
+          typing.classList.add("fade");
+          
+          setTimeout(() => {
+            typing.classList.remove("fade");
+            
+            typeText(part3, () => {
+              button.style.display = "inline-block";
+            });
+          }, 600);
+        }, 1800);
       });
-
     }, 600);
-
   }, 1800);
-
 });
 
 function showFinal(){
@@ -294,13 +297,10 @@ const stars = document.getElementById("stars");
 
 for(let s=0; s<45; s++){
   const star = document.createElement("div");
-
   star.className = "star";
-
   star.style.left = Math.random()*100 + "%";
   star.style.top = Math.random()*100 + "%";
   star.style.animationDelay = Math.random()*4 + "s";
-
   stars.appendChild(star);
 }
 </script>
